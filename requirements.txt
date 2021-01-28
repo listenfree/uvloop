@@ -1,1 +1,1 @@
-sampleproject==2.0.0
+uvloop==0.14.0
