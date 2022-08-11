@@ -17,33 +17,13 @@ jobs:
       - name: Run build script in Alpine container
         run: docker-compose run -T build
 
-      - name: Get file name and sha256 of asset
-        id: asset
+      - name: Commit files
         run: |
-          echo "::set-output name=package_name::$(awk -F '==' '{ print $1 }' requirements.txt)"
-          echo "::set-output name=filename::$(ls *.whl)"
-          echo "::set-output name=sha256::$(shasum -a 256 *.whl | awk '{ print $1 }')"
-
-      - name: Show sha256 of asset
-        run: shasum -a 256 ${{ github.workspace }}/${{ steps.asset.outputs.filename }}
-
-      - name: Upload asset to release
-        id: upload
-
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Add changes" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          asset_content_type: application/octet-stream
-          asset_path: ${{ github.workspace }}/${{ steps.asset.outputs.filename }}
-          asset_name: ${{ steps.asset.outputs.filename }}
-          upload_url: ${{ github.event.release.upload_url }}
-
-      - name: Send repository dispatch to package index
-        if: github.event_name == 'release'
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ secrets.DISPATCH_TOKEN }}
-          repository: alpine-wheels/index
-          event-type: add_file
-          client-payload: '{"package_name": "${{ steps.asset.outputs.package_name }}", "href": "${{ steps.upload.outputs.browser_download_url }}", "hash_name": "sha256", "hash_value": "${{ steps.asset.outputs.sha256 }}"}'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
