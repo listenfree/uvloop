@@ -2,7 +2,7 @@
 
 services:
   build:
-    image: python:3.10.2-alpine3.15
+    image: alpine:latest
     working_dir: /workspace
     entrypoint:
       - /bin/sh
