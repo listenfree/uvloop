@@ -1,4 +1,4 @@
-# Alpine Wheels template repository
+# Alpine uvloop wheel
 
 * use alpine:latest to build uvloop
 * and then
