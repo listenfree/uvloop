@@ -2,14 +2,8 @@
 
 name: Build Python wheel for Alpine Linux
 
-on:
-  pull_request:
-    branches:
-      - master
-  release:
-    types:
-      - published
-
+on:[push]
+  
 jobs:
 
   build:
