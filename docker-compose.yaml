@@ -2,7 +2,7 @@
 
 services:
   build:
-    image: alpine:latest
+    image: alpine:3.17.4
     working_dir: /workspace
     entrypoint:
       - /bin/sh
