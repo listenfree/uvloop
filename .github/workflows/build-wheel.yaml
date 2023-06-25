@@ -2,7 +2,8 @@
 
 name: Build Python wheel for Alpine Linux
 
-on: [push]
+on: 
+  workflow_dispatch:
   
 jobs:
 
